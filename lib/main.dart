@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:sabak_23_chat_app/pages/auth_page.dart';
+import 'package:sabak_23_chat_app/pages/sing_in_page.dart';
 
 import 'firebase_options.dart';
 
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor: Color(0xffF9FAFB),
       ),
-      home: const AuthPage(),
+      home: const SignInPage(),
     );
   }
 }

@@ -1,33 +1,48 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sabak_23_chat_app/pages/chat_page.dart';
+import 'package:sabak_23_chat_app/pages/sing_in_page.dart';
 import 'package:sabak_23_chat_app/theme/text_styles.dart';
 import 'package:sabak_23_chat_app/widgets/email_password_card.dart';
 import 'package:sabak_23_chat_app/widgets/sign_in_button.dart';
 import 'package:sabak_23_chat_app/widgets/with_platform_sign_in_button.dart';
 
-class AuthPage extends StatefulWidget {
-  const AuthPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<AuthPage> createState() => _AuthPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController editingController = TextEditingController();
-  final TextEditingController passwordEditingController =
-      TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  Future<void> signIn() async {
+  Future<void> signup() async {
     try {
-      await auth.signInWithEmailAndPassword(
+      await auth.createUserWithEmailAndPassword(
           email: editingController.text.trim(),
-          password: passwordEditingController.text.trim());
+          password: passwordController.text.trim());
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ChatPage()),
       );
-    } catch (e) {}
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Column(
+          children: [
+            Text('Регистрация болгон экенсиз, логин менен кириниз'),
+            ElevatedButton(
+                onPressed: () {}, child: Text('логин барагына отунуз'))
+          ],
+        ),
+      ));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SignInPage()),
+      );
+      print('Login failed: ${e.toString()}');
+    }
   }
 
   @override
@@ -43,24 +58,20 @@ class _AuthPageState extends State<AuthPage> {
               style: TextStyles.headings,
             ),
             Text(
-              'Sign in to continue',
+              'Sign up to continue',
               style: TextStyles.bodyMedium,
             ),
             UserEmailPasswordCard(
+              controller: editingController,
               labelText: 'Email',
               hintTextText: 'Enter your email',
             ),
             UserEmailPasswordCard(
+              controller: passwordController,
               labelText: 'Password',
               hintTextText: 'Enter your password',
             ),
-            SignInButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ChatPage();
-                }));
-              },
-            ),
+            SignInButton(text: 'Sign Up', onPressed: signup),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -69,7 +80,7 @@ class _AuthPageState extends State<AuthPage> {
                   style: TextStyles.bodySmall,
                 ),
                 Text(
-                  "Sign Up",
+                  "Sign In",
                   style: TextStyles.bodySmall.copyWith(
                     color: Colors.blue,
                   ),

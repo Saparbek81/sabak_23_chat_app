@@ -5,8 +5,10 @@ class SignInButton extends StatelessWidget {
   const SignInButton({
     super.key,
     this.onPressed,
+    required this.text,
   });
   final void Function()? onPressed;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class SignInButton extends StatelessWidget {
       onPressed: onPressed,
       child: Center(
         child: Text(
-          'sign in',
+          text,
           style: TextStyles.bodyMedium.copyWith(color: Colors.white),
         ),
       ),
